@@ -8,16 +8,17 @@ namespace A3_1_PrimeNumbers
     {
         static void Main(string[] args)
         {
-            int int1 = -9;
-            int int2 = 78;
-            int int3 = -23;
-            int int4 = 587;
+            Random random = new Random();
+            List<int> rdmList = new List<int>();
+            for (int x = 0; x < 5; x++)
+            {
+                rdmList.Add(random.Next(1, 100));
+            }
 
-            Console.WriteLine(String.Join(':', PrimeNumbers.IsPrimeNumberList(int1)));
-            Console.WriteLine(String.Join(':', PrimeNumbers.IsPrimeNumberList(int2)));
-            Console.WriteLine(String.Join(':', PrimeNumbers.IsPrimeNumberList(int3)));
-            Console.WriteLine(String.Join(':', PrimeNumbers.IsPrimeNumberList(int4)));
-
+            foreach(int x in rdmList)
+            {
+                PrimeNumbers.DisplayPrimeNumAndFactorial(x);
+            }
             Console.ReadLine();
 
         }
@@ -86,49 +87,36 @@ namespace A3_1_PrimeNumbers
 
             }
 
-            static public Dictionary<int, int> DisplayPrimeNumberFactorials(int num)
-            {
-                bool isPrimeNumberBool = IsPrimeNumberBool(num);
-                Dictionary<int, int> dicList = new Dictionary<int, int>();
-
-                if (isPrimeNumberBool == true)
-                {
-                    Console.WriteLine(String.Join(',', dicList));
-                }
-                else if (isPrimeNumberBool == false)
-                {
-                    dicList = IsPrimeNumberList(num);
-                    
-                }
-            }
-
-            static public Dictionary<int, int> FindNumberFactorials(int num)
-            {
-                Dictionary<int, int> dicList = new Dictionary<int, int>();
-                dicList = IsPrimeNumberList(num);
-
-
-            }
-
-            private List<int> FindNum (int x)
+            static public List<int> FindNumberFactorials (int x)
             {
                 List<int> list = new List<int>();
                 Dictionary<int, int> dicList = new Dictionary<int, int>();
 
                 dicList = IsPrimeNumberList(x);
-                if(dicList.Count == 0)
+                bool dicListBool = IsPrimeNumberBool(x);
+                if(dicListBool == true)
                 {
                     list.Add(x);
                     return list;
                 }
                 else
                 {
-                    foreach (int y in dicList.Keys)
-                    {
-
-                    }
+                    int val1 = dicList.ElementAt(1).Key;
+                    int val2 = dicList.ElementAt(1).Value;
+                    list.AddRange(FindNumberFactorials(val1));
+                    list.AddRange(FindNumberFactorials(val2));
                 }
+                return list;
              
+            }
+
+            public static void DisplayPrimeNumAndFactorial(int x)
+            {
+                Console.WriteLine($"Number is: {x}");
+                Console.WriteLine($"Prime: {IsPrimeNumberBool(x)}");
+                Console.WriteLine($"Combinations: {String.Join(':', IsPrimeNumberList(x))}");
+                Console.WriteLine($"Factorial: {String.Join(':', FindNumberFactorials(x))}");
+                Console.WriteLine();
             }
            
 
